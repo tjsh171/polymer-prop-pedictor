@@ -45,4 +45,6 @@ polymer_predictor/
 │ └── result.html # Results page
 ├── static/
 │ └── style.css # Styling
+├── requirements.txt
+├── screenshots
 └── README.md # You are here!
