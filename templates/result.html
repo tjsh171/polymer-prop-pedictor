@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Prediction Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+   <style>
+    body.main-bg {
+        margin: 0;
+        font-family: 'Chewy', cursive;
+        background: linear-gradient(to right, #22c6cb, #031520);
+        color: white;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .container {
+        max-width: 1000px;
+        margin: auto;
+        padding: 40px;
+        width: 90%;
+    }
+
+    .results-container {
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 20px;
+        padding: 30px;
+        width: 100%;
+        color: white;
+    }
+
+    .result-title {
+        font-size: 40px;
+        margin-bottom: 20px;
+        color: #fff;
+        text-align: center;
+    }
+
+    .result-line {
+        font-size: 22px;
+        margin: 10px 0;
+    }
+
+    .inference-box {
+        margin-top: 30px;
+        font-size: 18px;
+        background-color: rgba(255,255,255,0.1);
+        padding: 15px;
+        border-radius: 10px;
+    }
+
+    canvas {
+        margin-top: 30px;
+    }
+
+    .predict-btn {
+        padding: 12px 30px;
+        margin-top: 30px;
+        font-size: 18px;
+        font-weight: bold;
+        background-color: #fff;
+        color: #003545;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .predict-btn:hover {
+        background-color: #082b33;
+        color: white;
+    }
+</style>
+
+</head>
+<body class="main-bg">
+    <div class="container">
+        <div class="results-container">
+            <h1 class="result-title">Prediction Results</h1>
+
+            {% if error %}
+                <p style="color: red;">⚠️ {{ error }}</p>
+            {% else %}
+                {% for key, value in prediction.items() %}
+                    <div class="result-line">
+                         <strong>{{ key }}:</strong> {{ value | round(4) }}
+                        <span class="badge">predicted</span>
+                    </div>
+                {% endfor %}
+
+                <div class="inference-box">
+                    <h3> Inferences:</h3>
+                    <ul>
+                        {% if prediction.Tg %}
+                        <li>Tg ({{ prediction.Tg|round(2) }}) suggests a {{ 'low' if prediction.Tg < 50 else 'high' }} glass transition temperature — {% if prediction.Tg < 50 %}could mean flexibility at room temp{% else %}better thermal stability{% endif %}.</li>
+                        {% endif %}
+                        {% if prediction.Density %}
+                        <li>Density ({{ prediction.Density|round(3) }}) indicates the polymer is {{ 'lightweight' if prediction.Density < 1 else 'dense' }}.</li>
+                        {% endif %}
+                        {% if prediction.FFV %}
+                        <li>FFV ({{ prediction.FFV|round(3) }}) represents {{ 'low' if prediction.FFV < 0.2 else 'moderate to high' }} free volume fraction, affecting permeability.</li>
+                        {% endif %}
+                        {% if prediction.Tc %}
+                        <li>Tc ({{ prediction.Tc|round(2) }}) implies the critical temperature — {{ 'low' if prediction.Tc < 0.5 else 'high' }} cohesion potential.</li>
+                        {% endif %}
+                        {% if prediction.Rg %}
+                        <li>Rg ({{ prediction.Rg|round(2) }}) suggests a {{ 'compact' if prediction.Rg < 10 else 'spread-out' }} polymer conformation (radius of gyration).</li>
+                        {% endif %}
+                    </ul>
+                </div>
+
+                <h3 class="subtitle"> Predicted Property Profile</h3>
+                <canvas id="radarChart" width="400" height="400"></canvas>
+                <script>
+                    const ctx = document.getElementById('radarChart').getContext('2d');
+                    const radarChart = new Chart(ctx, {
+                        type: 'radar',
+                        data: {
+                            labels: ['Tg', 'FFV', 'Tc', 'Density', 'Rg'],
+                            datasets: [{
+                                label: 'Predicted Values',
+                                data: [
+                                    {{ prediction.Tg|round(2) }},
+                                    {{ prediction.FFV|round(3) }},
+                                    {{ prediction.Tc|round(3) }},
+                                    {{ prediction.Density|round(3) }},
+                                    {{ prediction.Rg|round(2) }}
+                                ],
+                                backgroundColor: 'rgba(34, 198, 203, 0.2)',
+                                borderColor: '#22c6cb',
+                                borderWidth: 2,
+                                pointBackgroundColor: '#fff'
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                r: {
+                                    angleLines: { color: '#555' },
+                                    grid: { color: '#999' },
+                                    pointLabels: { color: '#fff' },
+                                    ticks: { display: false }
+                                }
+                            }
+                        }
+                    });
+                </script>
+            {% endif %}
+
+            <br>
+             <form method="POST" action="/download">
+    {% for key, val in prediction.items() %}
+        <input type="hidden" name="{{ key }}" value="{{ val }}">
+    {% endfor %}
+    <button type="submit" class="predict-btn">⬇ Download Report (CSV)</button>
+</form>
+            <a href="/" class="predict-btn">Predict new</a>
+        </div>
+       
+       
+    </div>
+</body>
+</html>

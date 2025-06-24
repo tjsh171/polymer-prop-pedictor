@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MOLS - Polymer Predictor</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <link href="https://fonts.googleapis.com/css2?family=Chewy&display=swap" rel="stylesheet" />
+</head>
+<body class="main-bg">
+  <div class="container">
+    <h1 class="title">MOLS</h1>
+    <p class="subtitle">Predict Properties of Polymers at Ease!</p>
+    <p class="desc">
+      Lab testing all polymers might be tough <br />
+      This model helps check and visualize properties<br />
+      of any polymer of your choice!
+    </p>
+
+    <form method="POST" action="/predict">
+      <label for="smiles" class="label">Input in SMILES</label><br />
+      <input type="text" name="smiles" id="smiles" required class="input-box" /><br />
+      <button type="submit" class="predict-btn">Predict!</button>
+    </form>
+
+    <img src="{{ url_for('static', filename='flask.png') }}" alt="flask" class="flask-img" />
+  </div>
+ 
+</body>
+</html>

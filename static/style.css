@@ -1,0 +1,72 @@
+body.main-bg {
+  margin: 0;
+  font-family: 'Chewy', cursive;
+  background: linear-gradient(to right, #22c6cb, #031520);
+  color: white;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+    max-width: 600px;
+    margin-right: 400px;     /* Push from left */
+    padding: 30px;
+    
+}
+
+.title {
+  font-size: 60px;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.desc {
+  font-size: 18px;
+  margin-bottom: 30px;
+  line-height: 1.5;
+}
+
+.label {
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+
+.input-box {
+  padding: 10px;
+  font-size: 18px;
+  width: 300px;
+  border: none;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+.predict-btn {
+  padding: 12px 30px;
+  margin-top: 20px;
+  font-size: 18px;
+  font-weight: bold;
+  background-color: #fff;
+  color: #003545;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.predict-btn:hover {
+  background-color: #082b33;
+  color: white;
+}
+
+.flask-img {
+  position: absolute;
+  right: 120px;      /* move slightly inward from the edge */
+  top: 20%;         /* vertically center */
+
+  height: 430px;    /* enlarge the image */
+}
